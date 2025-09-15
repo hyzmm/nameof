@@ -10,6 +10,7 @@ class PropertyInfo extends ElementInfo {
     required bool isPrivate,
     required bool isAnnotated,
     required bool isIgnore,
+    bool hasCustomName = false,
     required this.isSetter,
     required this.isGetter,
   })  : assert(isGetter ^ isSetter),
@@ -18,7 +19,8 @@ class PropertyInfo extends ElementInfo {
             originalName: originalName,
             isIgnore: isIgnore,
             isPrivate: isPrivate,
-            isAnnotated: isAnnotated);
+            isAnnotated: isAnnotated,
+            hasCustomName: hasCustomName);
 
   factory PropertyInfo.fromElementInfo(ElementInfo based,
       {required bool isGetter, required bool isSetter}) {
@@ -28,6 +30,7 @@ class PropertyInfo extends ElementInfo {
         isIgnore: based.isIgnore,
         isPrivate: based.isPrivate,
         isAnnotated: based.isAnnotated,
+        hasCustomName: based.hasCustomName,
         isGetter: isGetter,
         isSetter: isSetter);
   }

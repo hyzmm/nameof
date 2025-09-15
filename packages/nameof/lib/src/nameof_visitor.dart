@@ -106,35 +106,39 @@ class NameofVisitor {
     final isAnnotated = element.hasAnnotation(NameofKey);
     final isIgnore = element.hasAnnotation(NameofIgnore);
 
-  String? name = (isAnnotated
-            ? element
-                    .getAnnotation(NameofKey)
-                    ?.getField('name')
-                    ?.toStringValue() ??
-        _elementNameForValue(element)
-      : _elementNameForValue(element))
+    final overrideName = isAnnotated
+        ? element.getAnnotation(NameofKey)?.getField('name')?.toStringValue()
+        : null;
+
+    String name = (overrideName ?? _elementNameForValue(element))
         .cleanFromServiceSymbols();
 
-  String originalName = _elementOriginalName(element).cleanFromServiceSymbols();
+    String originalName =
+        _elementOriginalName(element).cleanFromServiceSymbols();
 
     return ElementInfo(
         name: name,
         originalName: originalName,
         isPrivate: isPrivate,
         isAnnotated: isAnnotated,
-        isIgnore: isIgnore);
+        isIgnore: isIgnore,
+        hasCustomName: overrideName != null && overrideName.isNotEmpty);
   }
 
   String _elementNameForValue(Element element) {
     if (element is ConstructorElement) {
-      return (element.name == 'new' || element.name == null) ? '' : element.name!;
+      return (element.name == 'new' || element.name == null)
+          ? ''
+          : element.name!;
     }
     return element.name ?? '';
   }
 
   String _elementOriginalName(Element element) {
     if (element is ConstructorElement) {
-      return (element.name == 'new' || element.name == null) ? '' : element.name!;
+      return (element.name == 'new' || element.name == null)
+          ? ''
+          : element.name!;
     }
     return element.name ?? '';
   }

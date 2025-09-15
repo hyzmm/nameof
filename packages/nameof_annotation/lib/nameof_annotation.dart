@@ -7,7 +7,10 @@ class Nameof {
   /// This setting response for including and excluding elements of class
   final Coverage? coverage;
 
-  const Nameof({this.coverage});
+  /// Rename strategy for generated field names
+  final FieldRename? fieldRename;
+
+  const Nameof({this.coverage, this.fieldRename});
 }
 
 ///  Annotation for ignore inner elements of class (or mixin)
@@ -48,4 +51,19 @@ enum Coverage {
 
   /// Include elements only tagged with annotation [NameofKey]
   excludeImplicit
+}
+
+/// Rename strategies for fields
+enum FieldRename {
+  /// Do not rename fields
+  none,
+
+  /// Convert to snake_case
+  snake,
+
+  /// Convert to kebab-case
+  kebab,
+
+  /// Convert to PascalCase
+  pascal,
 }

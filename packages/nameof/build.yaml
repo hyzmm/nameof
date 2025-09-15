@@ -14,3 +14,7 @@ builders:
     build_extensions: { ".dart": [".nameof.dart"] }
     auto_apply: dependents
     build_to: source
+    defaults:
+      options:
+        # coverage: includeImplicit | excludeImplicit
+        # field_rename: none | snake | kebab | pascal

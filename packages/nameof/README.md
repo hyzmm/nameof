@@ -183,6 +183,28 @@ Output:
 abstract class NameofItinerary {
   static const String className = 'Itinerary';
 
+  New: Supports `field_rename` option to transform generated field names.
+
+  Usage in build.yaml:
+
+  ```yaml
+  targets:
+    $default:
+      builders:
+        nameof:
+          options:
+            coverage: includeImplicit
+            field_rename: snake # none|snake|kebab|pascal
+  ```
+
+  Or per-class via annotation:
+
+  ```dart
+  @Nameof(fieldRename: FieldRename.snake)
+  class MyClass { /* ... */ }
+  ```
+
+
   static const String fieldName = 'name';
   static const String fieldLength = 'length';
 }

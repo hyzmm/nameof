@@ -17,7 +17,7 @@ class BaseClass {
 @nameof
 class Car {
   final double price;
-  final double weigth;
+  final double weigthFactor;
 
   final int year;
   final String model;
@@ -27,7 +27,7 @@ class Car {
   @NameofIgnore()
   set moto(int repr) {}
 
-  Car(this.price, this.weigth, this.year, this.model);
+  Car(this.price, this.weigthFactor, this.year, this.model);
 
   Car.sedan(double price, double weigth, int year)
       : this(price, weigth, year, 'Sedan');

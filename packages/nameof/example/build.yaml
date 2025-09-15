@@ -4,3 +4,4 @@ targets:
       nameof:
         options:
           coverage: includeImplicit
+          field_rename: snake

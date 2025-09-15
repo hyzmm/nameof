@@ -15,7 +15,8 @@ class NameofGenerator extends GeneratorForAnnotation<Nameof> {
   @override
   String generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    if (element.kind != ElementKind.CLASS && element.kind != ElementKind.MIXIN) {
+    if (element.kind != ElementKind.CLASS &&
+        element.kind != ElementKind.MIXIN) {
       throw UnsupportedError("This is not a class (or mixin)!");
     }
 
@@ -35,6 +36,7 @@ class NameofGenerator extends GeneratorForAnnotation<Nameof> {
 
   NameofOptions _parseConfig(ConstantReader annotation) {
     final coverageConfigString = config['coverage']?.toString();
+    final fieldRenameConfigString = config['field_rename']?.toString();
 
     bool covTest(Coverage coverage) =>
         coverageConfigString == coverage.toShortString();
@@ -43,15 +45,27 @@ class NameofGenerator extends GeneratorForAnnotation<Nameof> {
         ? Coverage.values.firstWhere(covTest)
         : null;
 
+    bool frTest(FieldRename v) => fieldRenameConfigString == v.toShortString();
+    final fieldRenameConfig = FieldRename.values.any(frTest)
+        ? FieldRename.values.firstWhere(frTest)
+        : null;
+
     final coverageAnnotation = enumValueForDartObject(
       annotation.read('coverage'),
       Coverage.values,
     );
 
+    final fieldRenameAnnotation = enumValueForDartObject(
+      annotation.read('fieldRename'),
+      FieldRename.values,
+    );
+
     return NameofOptions(
         coverage:
             coverageAnnotation ?? coverageConfig ?? Coverage.includeImplicit,
-        scope: NameofScope.onlyPublic);
+        scope: NameofScope.onlyPublic,
+        fieldRename:
+            fieldRenameAnnotation ?? fieldRenameConfig ?? FieldRename.none);
   }
 
   T? enumValueForDartObject<T>(

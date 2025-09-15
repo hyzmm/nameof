@@ -8,5 +8,12 @@ class NameofOptions {
   /// Scope options (public or all)
   final NameofScope scope;
 
-  NameofOptions({required this.coverage, required this.scope});
+  /// Field rename option
+  final FieldRename fieldRename;
+
+  NameofOptions({
+    required this.coverage,
+    required this.scope,
+    this.fieldRename = FieldRename.none,
+  });
 }

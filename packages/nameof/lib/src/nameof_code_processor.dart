@@ -35,15 +35,16 @@ class NameofCodeProcessor {
     final constructorNames =
         _getCodeParts('constructor', visitor.constructors.values);
 
-    final fieldNames = _getCodeParts('field', visitor.fields.values);
+    final fieldNames = _getFieldCodeParts(visitor.fields.values);
 
     final functionNames = _getCodeParts('function', visitor.functions.values);
 
-      final propertyNames = _getFilteredNames(visitor.properties.values).map((prop) {
-        final p = prop as PropertyInfo;
-        final suffixSource = prop.name;
-        return "static const String property${p.propertyPrefix}${suffixSource.capitalize().privatize()} = '${prop.name}';";
-      });
+    final propertyNames =
+        _getFilteredNames(visitor.properties.values).map((prop) {
+      final p = prop as PropertyInfo;
+      final suffixSource = prop.name;
+      return "static const String property${p.propertyPrefix}${suffixSource.capitalize().privatize()} = '${prop.name}';";
+    });
 
     void writeCode(Iterable<String> codeLines) {
       if (codeLines.isNotEmpty) {
@@ -83,5 +84,23 @@ class NameofCodeProcessor {
       String elementType, Iterable<ElementInfo> elements) {
     return _getFilteredNames(elements).map((element) =>
         'static const String $elementType${element.scopePrefix}${element.originalName.capitalize().privatize()} = \'${element.name}\';');
+  }
+
+  Iterable<String> _getFieldCodeParts(Iterable<ElementInfo> elements) {
+    return _getFilteredNames(elements).map((element) {
+      final displayName = element.originalName.capitalize().privatize();
+      final renamed = element.hasCustomName
+          ? element.name
+          : _applyFieldRename(element.name);
+      return 'static const String field${element.scopePrefix}$displayName = \'$renamed\';';
+    });
+  }
+
+  String _applyFieldRename(String name) {
+    if (options.fieldRename == FieldRename.none) return name;
+    if (options.fieldRename == FieldRename.snake) return name.toSnakeCase();
+    if (options.fieldRename == FieldRename.kebab) return name.toKebabCase();
+    if (options.fieldRename == FieldRename.pascal) return name.toPascalCase();
+    return name;
   }
 }
