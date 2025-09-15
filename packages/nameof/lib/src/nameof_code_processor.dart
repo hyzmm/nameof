@@ -39,8 +39,11 @@ class NameofCodeProcessor {
 
     final functionNames = _getCodeParts('function', visitor.functions.values);
 
-    final propertyNames = _getFilteredNames(visitor.properties.values).map((prop) =>
-        'static const String property${(prop as PropertyInfo).propertyPrefix}${prop.originalName.capitalize().privatize()} = \'${prop.name}\';');
+      final propertyNames = _getFilteredNames(visitor.properties.values).map((prop) {
+        final p = prop as PropertyInfo;
+        final suffixSource = prop.name;
+        return "static const String property${p.propertyPrefix}${suffixSource.capitalize().privatize()} = '${prop.name}';";
+      });
 
     void writeCode(Iterable<String> codeLines) {
       if (codeLines.isNotEmpty) {

@@ -4,10 +4,8 @@ targets:
       nameof:
         enabled: true
         generate_for:
-          exclude:
-            - test
           include:
-            - test/integration/*
+            - test/integration/**
 
 builders:
   nameof:

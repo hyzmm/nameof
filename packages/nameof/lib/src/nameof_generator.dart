@@ -15,18 +15,18 @@ class NameofGenerator extends GeneratorForAnnotation<Nameof> {
   @override
   String generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    if (element.kind != ElementKind.CLASS && element.kind.name != 'MIXIN') {
+    if (element.kind != ElementKind.CLASS && element.kind != ElementKind.MIXIN) {
       throw UnsupportedError("This is not a class (or mixin)!");
     }
 
     final options = _parseConfig(annotation);
 
-    final visitor = NameofVisitor(element.name ??
-        () {
-          throw UnsupportedError(
-              'Class or mixin element does not have a name!');
-        }());
-    element.visitChildren(visitor);
+    final className = element.name ?? element.displayName;
+    if (className.isEmpty) {
+      throw UnsupportedError('Class or mixin element does not have a name!');
+    }
+    final visitor = NameofVisitor(className);
+    visitor.collectFrom(element);
 
     final code = NameofCodeProcessor(options, visitor).process();
 
